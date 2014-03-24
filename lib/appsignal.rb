@@ -7,14 +7,6 @@ module Appsignal
   class << self
     attr_accessor :config, :logger, :agent, :in_memory_log
 
-    def load_integrations
-      require 'appsignal/integrations/delayed_job'
-      require 'appsignal/integrations/passenger'
-      require 'appsignal/integrations/unicorn'
-      require 'appsignal/integrations/sidekiq'
-      require 'appsignal/integrations/resque'
-    end
-
     def extensions
       @extensions ||= []
     end
@@ -35,7 +27,6 @@ module Appsignal
           logger.level = Logger::INFO
         end
         logger.info("Starting appsignal-#{Appsignal::VERSION}")
-        load_integrations
         initialize_extensions
         @agent = Appsignal::Agent.new
         at_exit { @agent.shutdown(true) }
